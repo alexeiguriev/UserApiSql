@@ -22,12 +22,11 @@ namespace UserApi.Controllers
         private readonly IUserRepository _userRepository;
         private readonly ILogger _logger;
 
-        //public UserController(IUserRepository userRepository, IMapper mapper, ILogger logger)
-        public UserController(IUserRepository userRepository, IMapper mapper)
+        public UserController(IUserRepository userRepository, IMapper mapper, ILogger<UserController> logger)
         {
             _userRepository = userRepository;
             _mapper = mapper;
-            //_logger = logger;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -37,12 +36,12 @@ namespace UserApi.Controllers
             {
                 var users = _userRepository.Get();
                 IEnumerable<UserDTO> userDTO = _mapper.Map<IEnumerable<UserDTO>>(users);
-                //_logger.LogInformation("Get all users");
+                _logger.LogInformation("Get all users");
                 return Ok(userDTO);
             }
             catch(Exception ex)
             {
-                //_logger.LogError(ex, "Error: Get all users error");
+                _logger.LogError(ex, "Error: Get all users error");
                 return NoContent();
             }
         }
@@ -54,12 +53,12 @@ namespace UserApi.Controllers
             {
                 var user = _userRepository.Get(id);
                 UserDTO userDTO = _mapper.Map<UserDTO>(user);
-                //_logger.LogInformation($"Get user: id: { userDTO.Id }, FirstName: {userDTO.FirstName}, LastName: {userDTO.LastName}");
+                _logger.LogInformation($"Get user: id: { userDTO.Id }, FirstName: {userDTO.FirstName}, LastName: {userDTO.LastName}");
                 return Ok(userDTO);
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex, "ERROR: Get user: id: { userDTO.Id }, FirstName: {userDTO.FirstName}, LastName: {userDTO.LastName}");
+                _logger.LogError(ex, $"ERROR: Get user: id: { id }");
                 return NoContent();
             }
         }
@@ -70,12 +69,12 @@ namespace UserApi.Controllers
             try
             {
                 var newUser = _userRepository.Create(user);
-                //_logger.LogInformation($"Post user: id: { user.Id }, FirstName: {user.FirstName}, LastName: {user.LastName}");
+                _logger.LogInformation($"Post user: id: { user.Id }, FirstName: {user.FirstName}, LastName: {user.LastName}");
                 return Ok(CreatedAtAction(nameof(GetUsers), new { id = newUser.Id }, newUser));
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex, $"ERROR: Post user: id: { user.Id }, FirstName: {user.FirstName}, LastName: {user.LastName}");
+                _logger.LogError(ex, $"ERROR: Post user: id: { user.Id }, FirstName: {user.FirstName}, LastName: {user.LastName}");
                 return NoContent();
             }
         }
@@ -90,7 +89,7 @@ namespace UserApi.Controllers
                 {
                     return BadRequest();
                 }
-                //_logger.LogInformation($"Update user: id: { user.Id }, FirstName: {user.FirstName}, LastName: {user.LastName}");
+                _logger.LogInformation($"Update user: id: { user.Id }, FirstName: {user.FirstName}, LastName: {user.LastName}");
 
                 _userRepository.Update(user);
 
@@ -98,7 +97,7 @@ namespace UserApi.Controllers
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex, $"ERROR: Update user: id: { user.Id }, FirstName: {user.FirstName}, LastName: {user.LastName}");
+                _logger.LogError(ex, $"ERROR: Update user: id: { user.Id }, FirstName: {user.FirstName}, LastName: {user.LastName}");
                 return NoContent();
             }
         }
@@ -112,14 +111,14 @@ namespace UserApi.Controllers
                 var userToDelete = _userRepository.Get(id);
                 if (userToDelete == null)
                     return NotFound();
-                //_logger.LogInformation($"Delete user: id: { userToDelete.Id }, FirstName: {userToDelete.FirstName}, LastName: {userToDelete.LastName}");
+                _logger.LogInformation($"Delete user: id: { userToDelete.Id }, FirstName: {userToDelete.FirstName}, LastName: {userToDelete.LastName}");
 
                 _userRepository.Delete((int)userToDelete.Id);
                 return NoContent();
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex, $"Delete user: id: { userToDelete.Id }, FirstName: {userToDelete.FirstName}, LastName: {userToDelete.LastName}");
+                _logger.LogError(ex, $"Delete user: id: { id }");
                 return NoContent();
             }
         }
