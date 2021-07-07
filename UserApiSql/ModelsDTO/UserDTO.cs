@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace UserApi.Models
+namespace UserApi.ModelsDTO
 {
     public class UserDTO
     {

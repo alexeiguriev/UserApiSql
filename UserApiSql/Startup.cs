@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using UserApiSql.Data;
-using UserApiSql.Repository;
+using UserApiSql.Interfaces;
 
 namespace UserApiSql
 {

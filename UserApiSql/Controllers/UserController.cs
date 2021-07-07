@@ -7,10 +7,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using UserApi.Models;
+using UserApi.ModelsDTO;
 using UserApiSql.Data;
+using UserApiSql.Interfaces;
 using UserApiSql.Models;
-using UserApiSql.Repository;
 
 namespace UserApi.Controllers
 {
@@ -19,12 +19,12 @@ namespace UserApi.Controllers
     public class UserController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly IUserRepository _userRepository;
+        private readonly IUnitOfWork _uof;
         private readonly ILogger _logger;
 
-        public UserController(IUserRepository userRepository, IMapper mapper, ILogger<UserController> logger)
+        public UserController(IUnitOfWork uof, IMapper mapper, ILogger<UserController> logger)
         {
-            _userRepository = userRepository;
+            _uof = uof;
             _mapper = mapper;
             _logger = logger;
         }
@@ -34,7 +34,7 @@ namespace UserApi.Controllers
         {
             try
             {
-                var users = _userRepository.Get();
+                var users = _uof.UserRepository.Get();
                 IEnumerable<UserDTO> userDTO = _mapper.Map<IEnumerable<UserDTO>>(users);
                 _logger.LogInformation("Get all users");
                 return Ok(userDTO);
@@ -51,7 +51,7 @@ namespace UserApi.Controllers
         {
             try
             {
-                var user = _userRepository.Get(id);
+                var user = _uof.UserRepository.Get(id);
                 UserDTO userDTO = _mapper.Map<UserDTO>(user);
                 _logger.LogInformation($"Get user: id: { userDTO.Id }, FirstName: {userDTO.FirstName}, LastName: {userDTO.LastName}");
                 return Ok(userDTO);
@@ -68,7 +68,7 @@ namespace UserApi.Controllers
         {
             try
             {
-                var newUser = _userRepository.Create(user);
+                var newUser = _uof.UserRepository.Create(user);
                 _logger.LogInformation($"Post user: id: { user.Id }, FirstName: {user.FirstName}, LastName: {user.LastName}");
                 return Ok(CreatedAtAction(nameof(GetUsers), new { id = newUser.Id }, newUser));
             }
@@ -91,7 +91,7 @@ namespace UserApi.Controllers
                 }
                 _logger.LogInformation($"Update user: id: { user.Id }, FirstName: {user.FirstName}, LastName: {user.LastName}");
 
-                _userRepository.Update(user);
+                _uof.UserRepository.Update(user);
 
                 return NoContent();
             }
@@ -108,12 +108,12 @@ namespace UserApi.Controllers
 
             try
             {
-                var userToDelete = _userRepository.Get(id);
+                var userToDelete = _uof.UserRepository.Get(id);
                 if (userToDelete == null)
                     return NotFound();
                 _logger.LogInformation($"Delete user: id: { userToDelete.Id }, FirstName: {userToDelete.FirstName}, LastName: {userToDelete.LastName}");
 
-                _userRepository.Delete((int)userToDelete.Id);
+                _uof.UserRepository.Delete((int)userToDelete.Id);
                 return NoContent();
             }
             catch (Exception ex)

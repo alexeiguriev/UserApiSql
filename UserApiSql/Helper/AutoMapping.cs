@@ -3,9 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using UserApi.Models;
+using UserApi.ModelsDTO;
+using UserApiSql.Models;
 
-namespace UserApiSql.Models
+namespace UserApiSql.Helper
 {
     public class AutoMapping : Profile
     {

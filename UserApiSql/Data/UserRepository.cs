@@ -3,10 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using UserApiSql.Data;
+using UserApiSql.Interfaces;
 using UserApiSql.Models;
 
-namespace UserApiSql.Repository
+namespace UserApiSql.Data
 {
     public class UserRepository : IUserRepository
     {
