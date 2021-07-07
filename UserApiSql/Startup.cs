@@ -22,10 +22,10 @@ namespace UserApiSql
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddLogging();
-            services.AddScoped<IUserRepository, UserRepository>();
             services.AddDbContext<UserContext>(opt =>
                                                opt.UseSqlServer(Configuration.GetConnectionString("UserContext")));
             services.AddAutoMapper(typeof(Startup));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddControllers();
         }
 
