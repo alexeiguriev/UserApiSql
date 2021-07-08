@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UserApiSql.Data;
 
 namespace UserApiSql.Migrations
 {
     [DbContext(typeof(UserContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20210707202147_AddUserRoleRelationship")]
+    partial class AddUserRoleRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -112,7 +114,8 @@ namespace UserApiSql.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex("RoleId")
+                        .IsUnique();
 
                     b.HasIndex("UserId")
                         .IsUnique();
@@ -122,22 +125,26 @@ namespace UserApiSql.Migrations
 
             modelBuilder.Entity("UserApiSql.Models.UserRole", b =>
                 {
-                    b.HasOne("UserApiSql.Models.Role", null)
-                        .WithMany("UserRoles")
-                        .HasForeignKey("RoleId")
+                    b.HasOne("UserApiSql.Models.Role", "Role")
+                        .WithOne("UserRole")
+                        .HasForeignKey("UserApiSql.Models.UserRole", "RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("UserApiSql.Models.User", null)
+                    b.HasOne("UserApiSql.Models.User", "User")
                         .WithOne("UserRole")
                         .HasForeignKey("UserApiSql.Models.UserRole", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("UserApiSql.Models.Role", b =>
                 {
-                    b.Navigation("UserRoles");
+                    b.Navigation("UserRole");
                 });
 
             modelBuilder.Entity("UserApiSql.Models.User", b =>

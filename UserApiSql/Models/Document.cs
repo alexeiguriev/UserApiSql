@@ -15,7 +15,6 @@ namespace UserApiSql.Models
         public int Type { get; set; }
         public int Status { get; set; }
         public DateTime UploadedDate { get; set; }
-        [ForeignKey("User")]
         public int UploadedBy { get; set; }
 
 

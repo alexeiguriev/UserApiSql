@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UserApiSql.Data;
 
 namespace UserApiSql.Migrations
 {
     [DbContext(typeof(UserContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20210707202907_AddUserRoleRlationship")]
+    partial class AddUserRoleRlationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -122,17 +124,21 @@ namespace UserApiSql.Migrations
 
             modelBuilder.Entity("UserApiSql.Models.UserRole", b =>
                 {
-                    b.HasOne("UserApiSql.Models.Role", null)
+                    b.HasOne("UserApiSql.Models.Role", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("UserApiSql.Models.User", null)
+                    b.HasOne("UserApiSql.Models.User", "User")
                         .WithOne("UserRole")
                         .HasForeignKey("UserApiSql.Models.UserRole", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("UserApiSql.Models.Role", b =>

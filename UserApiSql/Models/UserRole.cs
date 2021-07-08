@@ -7,12 +7,9 @@ using System.Threading.Tasks;
 
 namespace UserApiSql.Models
 {
-    [Keyless]
-    public class UserRole
+    public class UserRole : BaseEntity<int>
     {
-        [ForeignKey("User")]
         public int UserId { get; set; }
-        [ForeignKey("Role")]
         public int RoleId { get; set; }
     }
 }
