@@ -7,12 +7,11 @@ using System.Threading.Tasks;
 
 namespace UserApiSql.Models
 {
-    [Keyless]
     public class UserRole
     {
-        [ForeignKey("User")]
         public int UserId { get; set; }
-        [ForeignKey("Role")]
+        public User User { get; set; }
         public int RoleId { get; set; }
+        public Role Role { get; set; }
     }
 }

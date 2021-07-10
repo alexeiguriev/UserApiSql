@@ -6,7 +6,7 @@ using UserApiSql.Models;
 
 namespace UserApiSql.Interfaces
 {
-    public interface IUnitOfWork
+    public interface IUserUnitOfWork
     {
         IUserRepository UserRepository { get; }
         Task<bool> SaveAsync();

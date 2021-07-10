@@ -7,11 +7,11 @@ using UserApiSql.Interfaces;
 
 namespace UserApiSql.Data
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UserUnitOfWork : IUserUnitOfWork
     {
         private readonly UserContext dc;
 
-        public UnitOfWork(UserContext dc)
+        public UserUnitOfWork(UserContext dc)
         {
             this.dc = dc;
         }

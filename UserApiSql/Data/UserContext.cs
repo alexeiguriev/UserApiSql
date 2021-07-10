@@ -20,7 +20,37 @@ namespace UserApiSql.Data
         public DbSet<UserRole> UserRoles { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>().ToTable("User");
+            modelBuilder.Entity<UserRole>()
+                .HasKey(bc => new { bc.UserId, bc.RoleId });
+
+            modelBuilder.Entity<UserRole>()
+                .HasOne(u => u.User)
+                .WithMany(ur => ur.UserRoles)
+                .HasForeignKey(ui => ui.UserId);
+
+            modelBuilder.Entity<UserRole>()
+              .HasOne(r => r.Role)
+              .WithMany(ur => ur.UserRoles)
+              .HasForeignKey(ui => ui.RoleId);
+
+            base.OnModelCreating(modelBuilder);
+
+            //modelBuilder.Entity<UserRole>()
+            //    .HasKey(bc => new { bc.UserId, bc.RoleId });
+            //modelBuilder.Entity<UserRole>()
+            //    .HasOne(bc => bc.User)
+            //    .WithMany(b => b.UserRoles)
+            //    .HasForeignKey(bc => bc.UserId)
+            //    .IsRequired();
+            //modelBuilder.Entity<UserRole>()
+            //    .HasOne(bc => bc.Role)
+            //    .WithMany(c => c.UserRoles)
+            //    .HasForeignKey(bc => bc.RoleId)
+            //    .IsRequired();
+
+            //modelBuilder.Entity<Document>()
+            //    .HasOne(c => c.UpdatedBy)
+            //    .WithMany(e => e.Documents);
         }
     }
 }

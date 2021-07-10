@@ -34,18 +34,23 @@ namespace UserApiSql.Data
 
         public IEnumerable<User> Get()
         {
+            IEnumerable<Role> role = _context.Roles.ToList();
+            IEnumerable<UserRole> userRoles = _context.UserRoles.ToList();
             IEnumerable<User> user = _context.Users.ToList();
             return user;
         }
 
         public User Get(int id)
         {
+            IEnumerable<Role> role = _context.Roles.ToList();
+            IEnumerable<UserRole> userRoles = _context.UserRoles.ToList();
             User user = _context.Users.FirstOrDefault(i => i.Id == id);
             return user;
         }
 
-        public void Update(User user)
+        public void Update(int id, User user)
         {
+            user.Id = id;
             _context.Entry(user).State = EntityState.Modified;
             _context.SaveChanges();
         }

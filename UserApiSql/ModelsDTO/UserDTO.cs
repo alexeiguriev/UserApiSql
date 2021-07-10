@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UserApiSql.Models;
 
-namespace UserApi.ModelsDTO
+namespace UserApiSql.ModelsDTO
 {
     public class UserDTO
     {
-        public long Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string[] Roles { get; set; }
     }
 }

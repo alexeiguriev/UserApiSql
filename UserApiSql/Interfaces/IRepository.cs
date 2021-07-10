@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace UserApiSql.Interfaces
 {
-    public interface IRepository<TEntity>
+    public interface IRepository<TEntity,TInputData>
     {
-        public TEntity Create(TEntity entity);
+        public TEntity Create(TInputData entity);
 
         public void Delete(int id);
 
@@ -15,6 +15,6 @@ namespace UserApiSql.Interfaces
 
         public TEntity Get(int id);
 
-        public void Update(TEntity entity);
+        public void Update(int id, TInputData entity);
     }
 }

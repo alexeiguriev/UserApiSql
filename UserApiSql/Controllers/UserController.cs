@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using UserApi.ModelsDTO;
+using UserApiSql.ModelsDTO;
 using UserApiSql.Data;
 using UserApiSql.Interfaces;
 using UserApiSql.Models;
@@ -19,10 +19,10 @@ namespace UserApi.Controllers
     public class UserController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly IUnitOfWork _uof;
+        private readonly IUserUnitOfWork _uof;
         private readonly ILogger _logger;
 
-        public UserController(IUnitOfWork uof, IMapper mapper, ILogger<UserController> logger)
+        public UserController(IUserUnitOfWork uof, IMapper mapper, ILogger<UserController> logger)
         {
             _uof = uof;
             _mapper = mapper;
@@ -53,7 +53,7 @@ namespace UserApi.Controllers
             {
                 var user = _uof.UserRepository.Get(id);
                 UserDTO userDTO = _mapper.Map<UserDTO>(user);
-                _logger.LogInformation($"Get user: id: { userDTO.Id }, FirstName: {userDTO.FirstName}, LastName: {userDTO.LastName}");
+                _logger.LogInformation($"Get user: id:  FirstName: {userDTO.FirstName}, LastName: {userDTO.LastName}");
                 return Ok(userDTO);
             }
             catch (Exception ex)
@@ -85,13 +85,9 @@ namespace UserApi.Controllers
 
             try
             {
-                if (id != user.Id)
-                {
-                    return BadRequest();
-                }
                 _logger.LogInformation($"Update user: id: { user.Id }, FirstName: {user.FirstName}, LastName: {user.LastName}");
 
-                _uof.UserRepository.Update(user);
+                _uof.UserRepository.Update(id,user);
 
                 return NoContent();
             }

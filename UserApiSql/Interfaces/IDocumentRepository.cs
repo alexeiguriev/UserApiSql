@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UserApiSql.Models;
+using UserApiSql.ModelsDTO;
 
 namespace UserApiSql.Interfaces
 {
-    public interface IUserRepository : IRepository<User, User>
+    public interface IDocumentRepository : IRepository<Document, InputDocument>
     {
     }
 }
