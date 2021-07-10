@@ -25,8 +25,7 @@ namespace UserApiSql
             services.AddDbContext<UserContext>(opt =>
                                                opt.UseSqlServer(Configuration.GetConnectionString("UserContext")));
             services.AddAutoMapper(typeof(Startup));
-            services.AddScoped<IUserUnitOfWork, UserUnitOfWork>();
-            services.AddScoped<IDocumentUnitOfWork, DocumentUnitOfWork>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddControllers();
         }
 

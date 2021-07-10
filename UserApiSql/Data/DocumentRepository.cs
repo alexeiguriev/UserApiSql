@@ -9,7 +9,7 @@ using UserApiSql.ModelsDTO;
 
 namespace UserApiSql.Data
 {
-    public class DocumentRepository : IDocumentRepository
+    public class DocumentRepository : IRepository<Document,InputDocument>
     {
         private readonly UserContext _context;
 

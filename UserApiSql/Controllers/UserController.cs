@@ -19,10 +19,10 @@ namespace UserApi.Controllers
     public class UserController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly IUserUnitOfWork _uof;
+        private readonly IUnitOfWork _uof;
         private readonly ILogger _logger;
 
-        public UserController(IUserUnitOfWork uof, IMapper mapper, ILogger<UserController> logger)
+        public UserController(IUnitOfWork uof, IMapper mapper, ILogger<UserController> logger)
         {
             _uof = uof;
             _mapper = mapper;

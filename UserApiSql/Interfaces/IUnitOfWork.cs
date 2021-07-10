@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UserApiSql.Models;
+using UserApiSql.ModelsDTO;
 
 namespace UserApiSql.Interfaces
 {
-    public interface IUserUnitOfWork
+    public interface IUnitOfWork
     {
-        IUserRepository UserRepository { get; }
+        IRepository<User, User> UserRepository { get; }
+        IRepository<Document, InputDocument> DocumentRepository { get; }
         Task<bool> SaveAsync();
     }
 }

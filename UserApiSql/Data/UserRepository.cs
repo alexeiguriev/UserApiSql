@@ -8,7 +8,7 @@ using UserApiSql.Models;
 
 namespace UserApiSql.Data
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : IRepository<User,User>
     {
         private readonly UserContext _context;
 

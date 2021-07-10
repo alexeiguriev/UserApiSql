@@ -4,19 +4,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UserApiSql.Interfaces;
+using UserApiSql.Models;
+using UserApiSql.ModelsDTO;
 
 namespace UserApiSql.Data
 {
-    public class UserUnitOfWork : IUserUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
         private readonly UserContext dc;
 
-        public UserUnitOfWork(UserContext dc)
+        public UnitOfWork(UserContext dc)
         {
             this.dc = dc;
         }
-        public IUserRepository UserRepository =>
+        public IRepository<User, User> UserRepository =>
             new UserRepository(dc);
+        public IRepository<Document, InputDocument> DocumentRepository =>
+            new DocumentRepository(dc);
 
         public async Task<bool> SaveAsync()
         {

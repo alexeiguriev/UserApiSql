@@ -18,10 +18,10 @@ namespace UserApi.Controllers
     public class DocumentController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly IDocumentUnitOfWork _uof;
+        private readonly IUnitOfWork _uof;
         private readonly ILogger _logger;
 
-        public DocumentController(IDocumentUnitOfWork uof, IMapper mapper, ILogger<DocumentController> logger)
+        public DocumentController(IUnitOfWork uof, IMapper mapper, ILogger<DocumentController> logger)
         {
             _uof = uof;
             _mapper = mapper;
