@@ -27,8 +27,8 @@ namespace UserApiSql.Data
             {
 
                 context.Users.Add(user);
+                context.SaveChanges();
             }
-            context.SaveChanges();
         }
         static void DocumentInit(UserContext context)
         {
@@ -47,8 +47,8 @@ namespace UserApiSql.Data
             foreach (Document document in documents)
             {
                 context.Documents.Add(document);
+                context.SaveChanges();
             }
-            context.SaveChanges();
         }
         static void RoleInit(UserContext context)
         {
@@ -66,9 +66,9 @@ namespace UserApiSql.Data
             };
             foreach (Role role in roles)
             {
-                context.Roles.Add(role);
+                context.Roles.AddRange(role);
+                context.SaveChanges();
             }
-            context.SaveChanges();
         }
         static void UserRolesInit(UserContext context)
         {
@@ -82,15 +82,15 @@ namespace UserApiSql.Data
             {
                 new UserRole{UserId=1,RoleId=1},
                 new UserRole{UserId=1,RoleId=3},
-                new UserRole{UserId=2,RoleId=3},
+                new UserRole{UserId=2,RoleId=2},
                 new UserRole{UserId=3,RoleId=4}
             };
             foreach (UserRole userRole in userRoles)
             {
 
                 context.UserRoles.Add(userRole);
+                context.SaveChanges();
             }
-            context.SaveChanges();
             
         }
         public static void Initialize(UserContext context)
