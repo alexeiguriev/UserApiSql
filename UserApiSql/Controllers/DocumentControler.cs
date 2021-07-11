@@ -29,11 +29,11 @@ namespace UserApi.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetDocuments()
+        public async Task<IActionResult> GetDocuments()
         {
             try
             {
-                var documents = _uof.DocumentRepository.Get();
+                var documents = await _uof.DocumentRepository.Get();
                 IEnumerable<DocumentDTO> documentDTO = _mapper.Map<IEnumerable<DocumentDTO>>(documents);
                 _logger.LogInformation("Get all documents");
                 return Ok(documentDTO);
@@ -46,11 +46,11 @@ namespace UserApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetDocuments(int id)
+        public async Task<IActionResult> GetDocuments(int id)
         {
             try
             {
-                var document = _uof.DocumentRepository.Get(id);
+                var document = await _uof.DocumentRepository.Get(id);
                 DocumentDTO documentDTO = _mapper.Map<DocumentDTO>(document);
                 _logger.LogInformation($"Get document: Name: {documentDTO.Name}");
                 return Ok(documentDTO);
@@ -63,11 +63,11 @@ namespace UserApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult PostDocuments([FromBody] InputDocument documentInput)
+        public async Task<IActionResult> PostDocuments([FromBody] InputDocument documentInput)
         {
             try
             {
-                var newDocument = _uof.DocumentRepository.Create(documentInput);
+                var newDocument = await _uof.DocumentRepository.Create(documentInput);
                 DocumentDTO documentDTO = _mapper.Map<DocumentDTO>(newDocument);
                 _logger.LogInformation($"Post document: Name: {documentDTO.Name} ");
                 return Ok(documentDTO);
@@ -80,14 +80,14 @@ namespace UserApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult PutDocuments(int id, [FromBody] InputDocument documentInput)
+        public async Task<IActionResult> PutDocuments(int id, [FromBody] InputDocument documentInput)
         {
 
             try
             {
                 _logger.LogInformation($"Update document: Name: {documentInput.Name}");
 
-                _uof.DocumentRepository.Update(id,documentInput);
+                await _uof.DocumentRepository.Update(id,documentInput);
 
                 return NoContent();
             }
@@ -99,17 +99,17 @@ namespace UserApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
 
             try
             {
-                var documentToDelete = _uof.DocumentRepository.Get(id);
+                var documentToDelete = await _uof.DocumentRepository.Get(id);
                 if (documentToDelete == null)
                     return NotFound();
                 _logger.LogInformation($"Delete document: Name: {documentToDelete.Name}");
 
-                _uof.DocumentRepository.Delete((int)documentToDelete.Id);
+                await _uof.DocumentRepository.Delete((int)documentToDelete.Id);
                 return NoContent();
             }
             catch (Exception ex)

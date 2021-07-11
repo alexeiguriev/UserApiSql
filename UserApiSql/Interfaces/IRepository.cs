@@ -7,14 +7,14 @@ namespace UserApiSql.Interfaces
 {
     public interface IRepository<TEntity,TInputData>
     {
-        public TEntity Create(TInputData entity);
+        public Task<TEntity> Create(TInputData entity);
 
-        public void Delete(int id);
+        public Task Delete(int id);
 
-        public IEnumerable<TEntity> Get();
+        public Task<IEnumerable<TEntity>> Get();
 
-        public TEntity Get(int id);
+        public Task<TEntity> Get(int id);
 
-        public void Update(int id, TInputData entity);
+        public Task Update(int id, TInputData entity);
     }
 }

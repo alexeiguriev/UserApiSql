@@ -30,11 +30,11 @@ namespace UserApi.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetUsers()
+        public async Task<IActionResult> GetUsers()
         {
             try
             {
-                var users = _uof.UserRepository.Get();
+                var users = await _uof.UserRepository.Get();
                 IEnumerable<UserDTO> userDTO = _mapper.Map<IEnumerable<UserDTO>>(users);
                 _logger.LogInformation("Get all users");
                 return Ok(userDTO);
@@ -64,11 +64,11 @@ namespace UserApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult PostUsers([FromBody] User user)
+        public async Task<IActionResult> PostUsers([FromBody] User user)
         {
             try
             {
-                var newUser = _uof.UserRepository.Create(user);
+                var newUser = await _uof.UserRepository.Create(user);
                 _logger.LogInformation($"Post user: id: { user.Id }, FirstName: {user.FirstName}, LastName: {user.LastName}");
                 return Ok(CreatedAtAction(nameof(GetUsers), new { id = newUser.Id }, newUser));
             }
@@ -80,16 +80,16 @@ namespace UserApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult PutUsers(int id, [FromBody] User user)
+        public async Task<IActionResult> PutUsers(int id, [FromBody] User user)
         {
 
             try
             {
                 _logger.LogInformation($"Update user: id: { user.Id }, FirstName: {user.FirstName}, LastName: {user.LastName}");
 
-                _uof.UserRepository.Update(id,user);
+                await _uof.UserRepository.Update(id,user);
 
-                return NoContent();
+                return Ok("Element Modified");
             }
             catch (Exception ex)
             {
@@ -99,17 +99,17 @@ namespace UserApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
 
             try
             {
-                var userToDelete = _uof.UserRepository.Get(id);
+                var userToDelete = await _uof.UserRepository.Get(id);
                 if (userToDelete == null)
                     return NotFound();
                 _logger.LogInformation($"Delete user: id: { userToDelete.Id }, FirstName: {userToDelete.FirstName}, LastName: {userToDelete.LastName}");
 
-                _uof.UserRepository.Delete((int)userToDelete.Id);
+               await _uof.UserRepository.Delete((int)userToDelete.Id);
                 return NoContent();
             }
             catch (Exception ex)

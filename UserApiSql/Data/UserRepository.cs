@@ -17,42 +17,42 @@ namespace UserApiSql.Data
             _context = context;
         }
 
-        public User Create(User user)
+        public async Task<User> Create(User user)
         {
-            _context.Users.Add(user);
-            _context.SaveChanges();
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
 
             return user;
         }
 
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
-            User userToDelete = _context.Users.FirstOrDefault(i => i.Id == id);
+            User userToDelete = await _context.Users.FirstOrDefaultAsync(i => i.Id == id);
             _context.Users.Remove(userToDelete);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public IEnumerable<User> Get()
+        public async Task<IEnumerable<User>> Get()
         {
-            IEnumerable<Role> role = _context.Roles.ToList();
-            IEnumerable<UserRole> userRoles = _context.UserRoles.ToList();
-            IEnumerable<User> user = _context.Users.ToList();
+            IEnumerable<Role> role = await _context.Roles.ToListAsync();
+            IEnumerable<UserRole> userRoles = await _context.UserRoles.ToListAsync();
+            IEnumerable<User> user = await _context.Users.ToListAsync();
             return user;
         }
 
-        public User Get(int id)
+        public async Task<User> Get(int id)
         {
-            IEnumerable<Role> role = _context.Roles.ToList();
-            IEnumerable<UserRole> userRoles = _context.UserRoles.ToList();
-            User user = _context.Users.FirstOrDefault(i => i.Id == id);
+            IEnumerable<Role> role = await _context.Roles.ToListAsync();
+            IEnumerable<UserRole> userRoles = await _context.UserRoles.ToListAsync();
+            User user = await _context.Users.FirstOrDefaultAsync(i => i.Id == id);
             return user;
         }
 
-        public void Update(int id, User user)
+        public async Task Update(int id, User user)
         {
             user.Id = id;
             _context.Entry(user).State = EntityState.Modified;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }
