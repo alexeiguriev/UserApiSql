@@ -26,9 +26,17 @@ namespace UserApi.Controllers
             this.dc = dc;
         }
         [HttpPost]
-        public void PostDBInit()
+        public IActionResult PostDBInit()
         {
-            DbInitializer.Initialize(dc);
+            try
+            {
+                string state = DbInitializer.Initialize(dc);
+                return Ok(state);
+            }
+            catch
+            {
+                return NotFound();
+            }
         }
     }
 }

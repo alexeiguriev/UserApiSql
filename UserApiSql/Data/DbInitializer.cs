@@ -11,11 +11,6 @@ namespace UserApiSql.Data
     {
         static void UserInitialization(UserContext context)
         {
-            // Look for any users.
-            if (context.Users.Any())
-            {
-                return;   // DB has been seeded
-            }
             List<User> users = new List<User>()
             {
                 new User { FirstName = "Guriev", LastName = "Alexei", EmailAddress = "alexeiemail@Gmail.com", Password = "alexeiTestPassword" },
@@ -32,11 +27,6 @@ namespace UserApiSql.Data
         }
         static void DocumentInit(UserContext context)
         {
-            // Look for any document.
-            if (context.Documents.Any())
-            {
-                return;   // DB has been seeded
-            }
             List<Document> documents = new List<Document>()
             {
                 new Document { Name = "TestDocument1", Type = 1, Status = 2, UploadedDate = DateTime.Now, UpdatedBy = context.Users.FirstOrDefault(i => i.Id == 1)},
@@ -52,11 +42,6 @@ namespace UserApiSql.Data
         }
         static void RoleInit(UserContext context)
         {
-            // Look for any role.
-            if (context.Roles.Any())
-            {
-                return;   // DB has been seeded
-            }
             List<Role> roles = new List<Role>()
             {
                 new Role{Name="Developer"},
@@ -72,11 +57,6 @@ namespace UserApiSql.Data
         }
         static void UserRolesInit(UserContext context)
         {
-            // Look for any user roles.
-            if (context.UserRoles.Any())
-            {
-                return;   // DB has been seeded
-            }
 
             List<UserRole> userRoles = new List<UserRole>()
             {
@@ -93,12 +73,20 @@ namespace UserApiSql.Data
             }
             
         }
-        public static void Initialize(UserContext context)
+        public static string Initialize(UserContext context)
         {
+            // Look for any users.
+            if ((context.Users.Any()) || (context.Documents.Any()) || (context.Roles.Any()) || (context.UserRoles.Any()))
+            {
+                return "Data already exist";
+            }
+
             UserInitialization(context);
             DocumentInit(context);
             RoleInit(context);
             UserRolesInit(context);
+
+            return "Data added - done";
         }
     }
 }
