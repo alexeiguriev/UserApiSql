@@ -42,15 +42,18 @@ namespace UserApiSql.Data
 
         public async Task<IEnumerable<Document>> Get()
         {
-            IEnumerable<User> user = await _context.Users.ToListAsync();
-            IEnumerable<Document> document = await _context.Documents.ToListAsync();
+            IEnumerable<Document> document = await _context.Documents
+                .Include(u => u.UpdatedBy)
+                .ToListAsync();
 
             return document;
         }
 
         public async Task<Document> Get(int id)
         {
-            Document document = await _context.Documents.FirstOrDefaultAsync(i => i.Id == id);
+            Document document = await _context.Documents
+                .Include(u => u.UpdatedBy)
+                .FirstOrDefaultAsync(i => i.Id == id);
             return document;
         }
 

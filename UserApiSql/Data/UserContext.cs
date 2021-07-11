@@ -34,23 +34,7 @@ namespace UserApiSql.Data
               .HasForeignKey(ui => ui.RoleId);
 
             base.OnModelCreating(modelBuilder);
-
-            //modelBuilder.Entity<UserRole>()
-            //    .HasKey(bc => new { bc.UserId, bc.RoleId });
-            //modelBuilder.Entity<UserRole>()
-            //    .HasOne(bc => bc.User)
-            //    .WithMany(b => b.UserRoles)
-            //    .HasForeignKey(bc => bc.UserId)
-            //    .IsRequired();
-            //modelBuilder.Entity<UserRole>()
-            //    .HasOne(bc => bc.Role)
-            //    .WithMany(c => c.UserRoles)
-            //    .HasForeignKey(bc => bc.RoleId)
-            //    .IsRequired();
-
-            //modelBuilder.Entity<Document>()
-            //    .HasOne(c => c.UpdatedBy)
-            //    .WithMany(e => e.Documents);
         }
+
     }
 }

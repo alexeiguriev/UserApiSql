@@ -101,10 +101,10 @@ namespace UserApiSql.Migrations
 
             modelBuilder.Entity("UserApiSql.Models.UserRole", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RoleId")
+                    b.Property<int?>("RoleId")
                         .HasColumnType("int");
 
                     b.HasKey("UserId", "RoleId");

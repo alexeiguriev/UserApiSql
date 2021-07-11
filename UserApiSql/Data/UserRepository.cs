@@ -34,17 +34,22 @@ namespace UserApiSql.Data
 
         public async Task<IEnumerable<User>> Get()
         {
-            IEnumerable<Role> role = await _context.Roles.ToListAsync();
-            IEnumerable<UserRole> userRoles = await _context.UserRoles.ToListAsync();
-            IEnumerable<User> user = await _context.Users.ToListAsync();
+            IEnumerable<User> user = await _context.Users
+                .Include(ur => ur.UserRoles)
+                .ThenInclude(urr => urr.Role)
+                .Include(d => d.Documents)
+                .ToListAsync();
+
             return user;
         }
 
         public async Task<User> Get(int id)
         {
-            IEnumerable<Role> role = await _context.Roles.ToListAsync();
-            IEnumerable<UserRole> userRoles = await _context.UserRoles.ToListAsync();
-            User user = await _context.Users.FirstOrDefaultAsync(i => i.Id == id);
+            User user = await _context.Users
+                .Include(ur => ur.UserRoles)
+                .ThenInclude(urr => urr.Role)
+                .Include(d => d.Documents)
+                .FirstOrDefaultAsync(i => i.Id == id);
             return user;
         }
 
