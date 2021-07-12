@@ -8,8 +8,9 @@ namespace UserApiSql.ModelsDTO
     public class InputDocument
     {
         public string Name { get; set; }
-        public int Type { get; set; }
+        public string Type { get; set; }
         public int Status { get; set; }
         public int UpdaterId { get; set; }
+        public byte[] Attachment { get; set; }
     }
 }

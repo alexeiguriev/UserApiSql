@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -10,6 +11,9 @@ using Microsoft.Extensions.Logging;
 using UserApiSql.Interfaces;
 using UserApiSql.Models;
 using UserApiSql.ModelsDTO;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Newtonsoft.Json.Linq;
 
 namespace UserApi.Controllers
 {
@@ -35,6 +39,19 @@ namespace UserApi.Controllers
             {
                 // Get all the documents from database
                 var documents = await _uof.DocumentRepository.Get();
+                FileContentResult fileCR;
+                foreach (Document doc in documents)
+                {
+                    if (doc != null)
+                    {
+                        fileCR = new FileContentResult(doc.Attachment, doc.Type)
+                        {
+                            FileDownloadName = doc.Name
+                        };
+                        return Ok(fileCR);
+                    }
+                }
+
 
                 // Data map convertion
                 IEnumerable<DocumentDTO> documentDTO = _mapper.Map<IEnumerable<DocumentDTO>>(documents);
@@ -83,26 +100,48 @@ namespace UserApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostDocuments([FromBody] InputDocument documentInput)
+        public async Task<IActionResult> PostDocuments([FromForm(Name = "file")] IFormFile file, [FromForm(Name = "text")] string inputJSONString)
         {
             try
             {
+                JObject json = JObject.Parse(inputJSONString);
+
+                InputDocument storageDocument = Newtonsoft.Json.JsonConvert.DeserializeObject<InputDocument>(inputJSONString);
+                if (file != null)
+                {
+                    if ((file.Length > 0) || (file.Length < 10000000))
+                    {
+                        using (var target = new MemoryStream())
+                        {
+                            file.CopyTo(target);
+                            storageDocument.Attachment = target.ToArray();
+                        }
+                    }
+                    else
+                    {
+                        return NotFound("File length out of range");
+                    }
+                }
+                storageDocument.Name = file.FileName;
+                storageDocument.Type = file.ContentType;
+
                 // Put on db new document
-                var newDocument = await _uof.DocumentRepository.Create(documentInput);
+                var newDocument = await _uof.DocumentRepository.Create(storageDocument);
 
                 // Map data convertion
-                DocumentDTO documentDTO = _mapper.Map<DocumentDTO>(newDocument);
+                //DocumentDTO documentDTO = _mapper.Map<DocumentDTO>(newDocument);
 
                 // Log the post data information
-                _logger.LogInformation($"Post document: Name: {documentDTO.Name} ");
+                //_logger.LogInformation($"Post document: Name: {documentDTO.Name} ");
 
                 //Return statuc
-                return Ok(documentDTO);
+                //return Ok(documentDTO);
+                return Ok();
             }
             catch (Exception ex)
             {
                 // Log the error information
-                _logger.LogError(ex, $"ERROR: Post document: Name: {documentInput.Name}");
+                _logger.LogError(ex, $"ERROR: Post document");
 
                 // Return error
                 return NotFound(404);

@@ -12,10 +12,14 @@ namespace UserApiSql.Models
         [Required]
         [MaxLength(50)]
         public string Name { get; set; }
-        public int Type { get; set; }
+        [Required]
+        [MaxLength(50)]
+        public string Type { get; set; }
         public int Status { get; set; }
         public DateTime UploadedDate { get; set; }
         [Required]
         public User UpdatedBy { get; set; }
+        [MaxLength(10000000)]
+        public byte[] Attachment { get; set; }
     }
 }

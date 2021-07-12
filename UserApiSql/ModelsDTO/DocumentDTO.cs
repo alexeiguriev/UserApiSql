@@ -13,11 +13,9 @@ namespace UserApiSql.ModelsDTO
     public class DocumentDTO
     {
         public string Name { get; set; }
-        public int Type { get; set; }
+        public string Type { get; set; }
         public int Status { get; set; }
         public DateTime UploadedDate { get; set; }
         public string UpdatedBy { get; set; }
-        //public string UpdaterLastName { get; set; }
-        //public Redactor UpdatedBy = new Redactor();
     }
 }

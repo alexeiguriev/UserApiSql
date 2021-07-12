@@ -29,10 +29,10 @@ namespace UserApiSql.Data
         {
             List<Document> documents = new List<Document>()
             {
-                new Document { Name = "TestDocument1", Type = 1, Status = 2, UploadedDate = DateTime.Now, UpdatedBy = context.Users.FirstOrDefault(i => i.Id == 1)},
-                new Document { Name = "TestDocument2", Type = 3, Status = 5, UploadedDate = DateTime.Now, UpdatedBy = context.Users.FirstOrDefault(i => i.Id == 1) },
-                new Document { Name = "TestDocument3", Type = 3, Status = 1, UploadedDate = DateTime.Now, UpdatedBy = context.Users.FirstOrDefault(i => i.Id == 2) },
-                new Document { Name = "TestDocument4", Type = 3, Status = 1, UploadedDate = DateTime.Now, UpdatedBy = context.Users.FirstOrDefault(i => i.Id == 3) }
+                new Document { Name = "TestDocument1", Type = "PDF", Status = 2, UploadedDate = DateTime.Now, UpdatedBy = context.Users.FirstOrDefault(i => i.Id == 1)},
+                new Document { Name = "TestDocument2", Type = "PDF", Status = 5, UploadedDate = DateTime.Now, UpdatedBy = context.Users.FirstOrDefault(i => i.Id == 1) },
+                new Document { Name = "TestDocument3", Type = "PDF", Status = 1, UploadedDate = DateTime.Now, UpdatedBy = context.Users.FirstOrDefault(i => i.Id == 2) },
+                new Document { Name = "TestDocument4", Type = "PDF", Status = 1, UploadedDate = DateTime.Now, UpdatedBy = context.Users.FirstOrDefault(i => i.Id == 3) }
             };
             foreach (Document document in documents)
             {
@@ -82,7 +82,7 @@ namespace UserApiSql.Data
             }
 
             UserInitialization(context);
-            DocumentInit(context);
+            //DocumentInit(context);
             RoleInit(context);
             UserRolesInit(context);
 

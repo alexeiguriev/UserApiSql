@@ -24,6 +24,7 @@ namespace UserApiSql.Data
             document.Name = documentInput.Name;
             document.Type = documentInput.Type;
             document.Status = documentInput.Status;
+            document.Attachment = documentInput.Attachment;
             document.UploadedDate = DateTime.Now;
             document.UpdatedBy = _context.Users.FirstOrDefault(i => i.Id == documentInput.UpdaterId);
 
