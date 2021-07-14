@@ -11,6 +11,6 @@ namespace UserApiSql.ModelsDTO
         public string Type { get; set; }
         public int Status { get; set; }
         public int UpdaterId { get; set; }
-        public byte[] Attachment { get; set; }
+        public byte[] Content { get; set; }
     }
 }

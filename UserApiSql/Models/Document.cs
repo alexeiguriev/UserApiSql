@@ -20,6 +20,6 @@ namespace UserApiSql.Models
         [Required]
         public User UpdatedBy { get; set; }
         [MaxLength(10000000)]
-        public byte[] Attachment { get; set; }
+        public byte[] Content { get; set; }
     }
 }

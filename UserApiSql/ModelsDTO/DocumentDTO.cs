@@ -17,5 +17,6 @@ namespace UserApiSql.ModelsDTO
         public int Status { get; set; }
         public DateTime UploadedDate { get; set; }
         public string UpdatedBy { get; set; }
+        public byte[] Content { get; set; }
     }
 }

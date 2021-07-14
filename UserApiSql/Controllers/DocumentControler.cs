@@ -14,6 +14,7 @@ using UserApiSql.ModelsDTO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace UserApi.Controllers
 {
@@ -39,19 +40,6 @@ namespace UserApi.Controllers
             {
                 // Get all the documents from database
                 var documents = await _uof.DocumentRepository.Get();
-                FileContentResult fileCR;
-                foreach (Document doc in documents)
-                {
-                    if (doc != null)
-                    {
-                        fileCR = new FileContentResult(doc.Attachment, doc.Type)
-                        {
-                            FileDownloadName = doc.Name
-                        };
-                        return Ok(fileCR);
-                    }
-                }
-
 
                 // Data map convertion
                 IEnumerable<DocumentDTO> documentDTO = _mapper.Map<IEnumerable<DocumentDTO>>(documents);
@@ -106,37 +94,33 @@ namespace UserApi.Controllers
             {
                 JObject json = JObject.Parse(inputJSONString);
 
-                InputDocument storageDocument = Newtonsoft.Json.JsonConvert.DeserializeObject<InputDocument>(inputJSONString);
+                InputDocument storageDocument = new InputDocument();// = Newtonsoft.Json.JsonConvert.DeserializeObject<InputDocument>(inputJSONString);
+
                 if (file != null)
                 {
                     if ((file.Length > 0) || (file.Length < 10000000))
                     {
-                        using (var target = new MemoryStream())
-                        {
-                            file.CopyTo(target);
-                            storageDocument.Attachment = target.ToArray();
-                        }
+
+                        storageDocument = _mapper.Map<InputDocument>((inputJSONString, file));
+
+                        // Put on db new document
+                        var newDocument = await _uof.DocumentRepository.Create(storageDocument);
+
+                        // Map data convertion
+                        DocumentDTO documentDTO = _mapper.Map<DocumentDTO>(newDocument);
+
+                        // Log the post data information
+                        _logger.LogInformation($"Post document: Name: {documentDTO.Name} ");
+
+                        //Return statuc
+                        return Ok(documentDTO);
                     }
                     else
                     {
                         return NotFound("File length out of range");
                     }
                 }
-                storageDocument.Name = file.FileName;
-                storageDocument.Type = file.ContentType;
 
-                // Put on db new document
-                var newDocument = await _uof.DocumentRepository.Create(storageDocument);
-
-                // Map data convertion
-                //DocumentDTO documentDTO = _mapper.Map<DocumentDTO>(newDocument);
-
-                // Log the post data information
-                //_logger.LogInformation($"Post document: Name: {documentDTO.Name} ");
-
-                //Return statuc
-                //return Ok(documentDTO);
-                return Ok();
             }
             catch (Exception ex)
             {
