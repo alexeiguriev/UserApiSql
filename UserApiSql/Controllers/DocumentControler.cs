@@ -92,16 +92,14 @@ namespace UserApi.Controllers
         {
             try
             {
-                JObject json = JObject.Parse(inputJSONString);
-
-                InputDocument storageDocument = new InputDocument();// = Newtonsoft.Json.JsonConvert.DeserializeObject<InputDocument>(inputJSONString);
-
+                // Check if file in not null
                 if (file != null)
                 {
+                    // Check if file is in range
                     if ((file.Length > 0) || (file.Length < 10000000))
                     {
-
-                        storageDocument = _mapper.Map<InputDocument>((inputJSONString, file));
+                        // Convert input data to InputDocument data type
+                        InputDocument storageDocument = _mapper.Map<InputDocument>((inputJSONString, file));
 
                         // Put on db new document
                         var newDocument = await _uof.DocumentRepository.Create(storageDocument);
@@ -117,8 +115,14 @@ namespace UserApi.Controllers
                     }
                     else
                     {
+                        // File out of range
                         return NotFound("File length out of range");
                     }
+                }
+                else
+                {
+                    // File object is null
+                    return NotFound("Wrong file: file is null");
                 }
 
             }
