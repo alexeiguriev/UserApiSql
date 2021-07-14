@@ -5,11 +5,6 @@ using System.Threading.Tasks;
 
 namespace UserApiSql.ModelsDTO
 {
-    public class Redactor
-    {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-    }
     public class DocumentDTO
     {
         public string Name { get; set; }

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace UserApiSql.Models
 {
-    public class Role : BaseEntity<int>
+    public class RoleDTO
     {
         [Required]
         [MaxLength(50)]
         public string Name { get; set; }
-        public List<UserRole> UserRoles { get; set; }
+        public string[] ReachedByUsers { get; set; }
     }
 }

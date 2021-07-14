@@ -14,12 +14,10 @@ namespace UserApiSql.Helper
     {
         public AutoMapping()
         {
-            //CreateMap<User, UserDTO>();
             CreateMap<User, UserDTO>()
                 .ForMember(d => d.FirstName, opt => opt.MapFrom(s => s.FirstName))
                 .ForMember(d => d.LastName, opt => opt.MapFrom(s => s.LastName))
                 .ForMember(d => d.Roles, opt => opt.MapFrom(s => s.UserRoles.Select(x => x.Role.Name)));
-            //CreateMap<Document, DocumentDTO>();
             
             CreateMap<Document, DocumentDTO>()
                 .ForMember(d => d.UpdatedBy, opt => opt.MapFrom(s => s.UpdatedBy.FirstName + " " + s.UpdatedBy.LastName));
@@ -31,14 +29,8 @@ namespace UserApiSql.Helper
                 .ForMember(d => d.Type, opt => opt.MapFrom(s => s.file.ContentType))
                 .ForMember(d => d.Content, opt => opt.MapFrom(s => Helper.PdfToByteBuffConverter(s.file)));
 
-            //CreateMap<string, InputDocument>()
-            //    .ForMember(d => d.UpdaterId, opt => opt.MapFrom(s => Newtonsoft.Json.JsonConvert.DeserializeObject<InputDocument>(s).UpdaterId))
-            //    .ForMember(d => d.Status, opt => opt.MapFrom(s => Newtonsoft.Json.JsonConvert.DeserializeObject<InputDocument>(s).Status));
-
-            //CreateMap<IFormFile, InputDocument>()
-            //    .ForMember(d => d.Content, opt => opt.MapFrom(s => Helper.PdfToByteBuffConverter(s)));
-
-
+            CreateMap<Role, RoleDTO>()
+                .ForMember(d => d.ReachedByUsers, opt => opt.MapFrom(u => Helper.ListOfUsersToUserString(u.UserRoles)));
         }
     }
 }
