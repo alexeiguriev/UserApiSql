@@ -117,13 +117,16 @@ namespace UserApi.Controllers
             try
             {
                 // Update role in database according ID
-                await _uof.RoleRepository.Update(id,role);
+                var newRole = await _uof.RoleRepository.Update(id,role);
+
+                // Map data convertion
+                RoleDTO roleDTO = _mapper.Map<RoleDTO>(newRole);
 
                 // Log information about creating role
                 _logger.LogInformation($"Update role: {role.Name}");
 
                 // Return - element modified
-                return Ok("Element Modified");
+                return Ok(roleDTO);
             }
             catch (Exception ex)
             {

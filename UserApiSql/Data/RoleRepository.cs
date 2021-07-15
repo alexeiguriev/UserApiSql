@@ -50,11 +50,13 @@ namespace UserApiSql.Data
             return role;
         }
 
-        public async Task Update(int id, Role role)
+        public async Task<Role> Update(int id, Role role)
         {
             role.Id = id;
             _context.Entry(role).State = EntityState.Modified;
             await _context.SaveChangesAsync();
+
+            return role;
         }
     }
 }

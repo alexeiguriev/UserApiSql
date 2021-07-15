@@ -8,9 +8,8 @@ namespace UserApiSql.Models
 {
     public class RoleDTO
     {
-        [Required]
-        [MaxLength(50)]
+        public int Id { get; set; }
         public string Name { get; set; }
-        public string[] ReachedByUsers { get; set; }
+        public int[] ReachedByUserIds { get; set; }
     }
 }

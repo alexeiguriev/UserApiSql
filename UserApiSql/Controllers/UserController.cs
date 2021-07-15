@@ -84,7 +84,7 @@ namespace UserApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostUsers([FromBody] User user)
+        public async Task<IActionResult> PostUsers([FromBody] UserInput user)
         {
             try
             {
@@ -98,7 +98,7 @@ namespace UserApi.Controllers
                 UserDTO userDTO = _mapper.Map<UserDTO>(newUser);
 
                 // Return new created user
-                return Ok(newUser);
+                return Ok(userDTO);
             }
             catch (Exception ex)
             {
@@ -111,19 +111,22 @@ namespace UserApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUsers(int id, [FromBody] User user)
+        public async Task<IActionResult> PutUsers(int id, [FromBody] UserInput user)
         {
 
             try
             {
                 // Update user in database according ID
-                await _uof.UserRepository.Update(id,user);
+                var newUser = await _uof.UserRepository.Update(id,user);
+
+                // Map data convertion
+                UserDTO userDTO = _mapper.Map<UserDTO>(newUser);
 
                 // Log information about creating user
                 _logger.LogInformation($"Update user: id: { user.Id }, FirstName: {user.FirstName}, LastName: {user.LastName}");
 
                 // Return - element modified
-                return Ok("Element Modified");
+                return Ok(userDTO);
             }
             catch (Exception ex)
             {
@@ -131,7 +134,7 @@ namespace UserApi.Controllers
                 _logger.LogError(ex, $"ERROR: Update user: id: { user.Id }, FirstName: {user.FirstName}, LastName: {user.LastName}");
 
                 // Return error
-                return NotFound(404);
+                return NotFound($"This user cannot be updated,\n {ex}");
             }
         }
 
@@ -165,7 +168,7 @@ namespace UserApi.Controllers
                 _logger.LogError(ex, $"Delete user: id: { id }");
                 
                 // Return error
-                return NotFound(404);
+                return NotFound($"This user cannot be deleted,\n {ex}");
             }
         }
     }

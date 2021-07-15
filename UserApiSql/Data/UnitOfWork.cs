@@ -17,7 +17,7 @@ namespace UserApiSql.Data
         {
             this.dc = dc;
         }
-        public IRepository<User, User> UserRepository =>
+        public IRepository<User, UserInput> UserRepository =>
             new UserRepository(dc);
         public IRepository<Document, InputDocument> DocumentRepository =>
             new DocumentRepository(dc);

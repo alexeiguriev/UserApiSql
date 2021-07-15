@@ -58,18 +58,21 @@ namespace UserApiSql.Data
             return document;
         }
 
-        public async Task Update(int id, InputDocument documentInput)
+        public async Task<Document> Update(int id, InputDocument documentInput)
         {
             Document document = new Document();
             document.Id = id;
             document.Name = documentInput.Name;
             document.Type = documentInput.Type;
             document.Status = documentInput.Status;
+            document.Content = documentInput.Content;
             document.UploadedDate = DateTime.Now;
             document.UpdatedBy = await _context.Users.FirstOrDefaultAsync(i => i.Id == id);
 
             _context.Entry(document).State = EntityState.Modified;
             await _context.SaveChangesAsync();
+
+            return document;
         }
     }
 }

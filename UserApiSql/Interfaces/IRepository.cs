@@ -15,6 +15,6 @@ namespace UserApiSql.Interfaces
 
         public Task<TEntity> Get(int id);
 
-        public Task Update(int id, TInputData entity);
+        public Task<TEntity> Update(int id, TInputData entity);
     }
 }

@@ -18,6 +18,44 @@ namespace UserApiSql.Helper
                 return target.ToArray();
             }
         }
+        public static int[] GetRoleIdsFromUserRoleList(List<UserRole> userRoles)
+        {
+            int[] roleIds;
+            if (userRoles != null)
+            {
+                List<int> userRolesIds = new List<int>();
+
+                foreach (UserRole ur in userRoles)
+                {
+                    userRolesIds.Add(ur.RoleId);
+                }
+                roleIds = userRolesIds.ToArray();
+            }
+            else
+            {
+                roleIds = null;
+            }
+            return roleIds;
+        }
+        public static int[] GetUserIdsFromUserRoleList(List<UserRole> userRoles)
+        {
+            int[] userIds;
+            if (userRoles != null)
+            {
+                List<int> userRolesIds = new List<int>();
+
+                foreach (UserRole ur in userRoles)
+                {
+                    userRolesIds.Add(ur.UserId);
+                }
+                userIds = userRolesIds.ToArray();
+            }
+            else
+            {
+                userIds = null;
+            }
+            return userIds;
+        }
         public static string[] ListOfUsersToUserString(List<UserRole> userRoles)
         {
             if (userRoles == null)

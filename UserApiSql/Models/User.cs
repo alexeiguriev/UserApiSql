@@ -24,6 +24,5 @@ namespace UserApiSql.Models
         //public ICollection<UserRole> Roles { get; set; }
         public List<UserRole> UserRoles { get; set; }
         public List<Document> Documents { get; set; }
-        //public List<UserRole> UserRoles { get; set; }
     }
 }

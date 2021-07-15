@@ -137,24 +137,48 @@ namespace UserApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutDocuments(int id, [FromBody] InputDocument documentInput)
+        public async Task<IActionResult> PutDocuments(int id, [FromForm(Name = "file")] IFormFile file, [FromForm(Name = "text")] string inputJSONString)
         {
-
             try
             {
-                // Update the document.
-                await _uof.DocumentRepository.Update(id,documentInput);
+                // Check if file in not null
+                if (file != null)
+                {
+                    // Check if file is in range
+                    if ((file.Length > 0) || (file.Length < 10000000))
+                    {
+                        // Convert input data to InputDocument data type
+                        InputDocument storageDocument = _mapper.Map<InputDocument>((inputJSONString, file));
 
-                // Log the information
-                _logger.LogInformation($"Update document: Name: {documentInput.Name}");
-                
-                //Return statuc
-                return Ok("Document " + documentInput.Name +" updated");
+                        // Put on db new document
+                        var newDocument = await _uof.DocumentRepository.Update(id, storageDocument);
+
+                        // Map data convertion
+                        DocumentDTO documentDTO = _mapper.Map<DocumentDTO>(newDocument);
+
+                        // Log the post data information
+                        _logger.LogInformation($"Put document: Name: {documentDTO.Name} ");
+
+                        //Return statuc
+                        return Ok(documentDTO);
+                    }
+                    else
+                    {
+                        // File out of range
+                        return NotFound("File length out of range");
+                    }
+                }
+                else
+                {
+                    // File object is null
+                    return NotFound("Wrong file: file is null");
+                }
+
             }
             catch (Exception ex)
             {
                 // Log the error information
-                _logger.LogError(ex, $"ERROR: Update document: Name: {documentInput.Name}");
+                _logger.LogError(ex, $"ERROR: Post document");
 
                 // Return error
                 return NotFound(404);
