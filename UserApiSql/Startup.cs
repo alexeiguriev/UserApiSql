@@ -7,6 +7,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using UserApiSql.Data;
 using UserApiSql.Interfaces;
+using Microsoft.AspNetCore.Authentication;
+using UserApiSql.Handlers;
 
 namespace UserApiSql
 {
@@ -24,6 +26,8 @@ namespace UserApiSql
             services.AddLogging();
             services.AddDbContext<UserContext>(opt =>
                                                opt.UseSqlServer(Configuration.GetConnectionString("UserContext")));
+            services.AddAuthentication("BasicAuthentication")
+                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication",null);
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddControllers();
@@ -39,6 +43,7 @@ namespace UserApiSql
             app.UseHttpsRedirection();
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

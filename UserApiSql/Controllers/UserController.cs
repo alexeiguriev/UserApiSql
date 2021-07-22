@@ -11,9 +11,11 @@ using UserApiSql.ModelsDTO;
 using UserApiSql.Data;
 using UserApiSql.Interfaces;
 using UserApiSql.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace UserApi.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -34,6 +36,7 @@ namespace UserApi.Controllers
         {
             try
             {
+                string email = HttpContext.User.Identity.Name;
                 // Get from Database all the users
                 var users = await _uof.UserRepository.Get();
 

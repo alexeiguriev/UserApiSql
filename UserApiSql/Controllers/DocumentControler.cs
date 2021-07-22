@@ -15,9 +15,11 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace UserApi.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class DocumentController : ControllerBase
