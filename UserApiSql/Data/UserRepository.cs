@@ -28,12 +28,15 @@ namespace UserApiSql.Data
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
 
-            foreach (int userRoleId in userInput.UserRolesId)
+            if (userInput.UserRolesId != null)
             {
-                UserRole userRole = new UserRole { UserId = user.Id, RoleId = userRoleId };
+                foreach (int userRoleId in userInput.UserRolesId)
+                {
+                    UserRole userRole = new UserRole { UserId = user.Id, RoleId = userRoleId };
 
-                _context.UserRoles.Add(userRole);
-                _context.SaveChanges();
+                    _context.UserRoles.Add(userRole);
+                    _context.SaveChanges();
+                }
             }
 
             return user;
