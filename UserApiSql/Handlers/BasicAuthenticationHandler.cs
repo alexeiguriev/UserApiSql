@@ -38,8 +38,6 @@ namespace UserApiSql.Handlers
             try
             {
                 var authenticationHeaderValue = AuthenticationHeaderValue.Parse(Request.Headers["Authorization"]);
-                //var bytes = Convert.FromBase64String(authenticationHeaderValue.Parameter);
-                //string[] credentials = Encoding.UTF8.GetString(bytes).Split(":");
                 string[] credentials = authenticationHeaderValue.Parameter.Split(":");
                 string emailAddress = credentials[0];
                 string password = credentials[1];
@@ -50,7 +48,7 @@ namespace UserApiSql.Handlers
                     {
                         if ((user.EmailAddress == emailAddress) && (user.Password == password))
                         {
-                            var claims = new[] { new Claim("Name", user.EmailAddress)};
+                            var claims = new[] { new Claim(ClaimTypes.Name, user.EmailAddress)};
                             var identity = new ClaimsIdentity(claims, Scheme.Name);
                             var principal = new ClaimsPrincipal(identity);
                             var ticker = new AuthenticationTicket(principal, Scheme.Name);
