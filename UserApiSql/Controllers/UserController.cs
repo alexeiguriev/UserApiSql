@@ -31,6 +31,7 @@ namespace UserApi.Controllers
             _logger = logger;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetUsers()
         {

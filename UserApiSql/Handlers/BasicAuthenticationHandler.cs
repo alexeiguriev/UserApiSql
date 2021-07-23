@@ -31,13 +31,13 @@ namespace UserApiSql.Handlers
         }
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            if (!Request.Headers.ContainsKey("Authorization"))
+            if (!Request.Headers.ContainsKey("Auth"))
             {
                 return AuthenticateResult.Fail("Authorization was not found");
             }
             try
             {
-                var authenticationHeaderValue = AuthenticationHeaderValue.Parse(Request.Headers["Authorization"]);
+                var authenticationHeaderValue = AuthenticationHeaderValue.Parse(Request.Headers["Auth"]);
                 string[] credentials = authenticationHeaderValue.Parameter.Split(":");
                 string emailAddress = credentials[0];
                 string password = credentials[1];
