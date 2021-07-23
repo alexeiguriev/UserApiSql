@@ -9,7 +9,7 @@ namespace UserApiSql.Interfaces
 {
     public interface IUnitOfWork
     {
-        IRepository<User, UserInput> UserRepository { get; }
+        IUserRepository<User, UserInput> UserRepository { get; }
         IRepository<Document, InputDocument> DocumentRepository { get; }
         IRepository<Role, Role> RoleRepository { get; }
         Task<bool> SaveAsync();

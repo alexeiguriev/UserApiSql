@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using UserApiSql.Helpers;
 using UserApiSql.Interfaces;
 using UserApiSql.Models;
 
@@ -16,7 +17,7 @@ namespace UserApiSql.Handlers
 {
     public class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {
-
+        private readonly JwtService _jwtService;
         private readonly IUnitOfWork _uof;
 
         public BasicAuthenticationHandler(
@@ -24,51 +25,36 @@ namespace UserApiSql.Handlers
             ILoggerFactory logger,
             UrlEncoder encoder,
             ISystemClock clock,
-            IUnitOfWork uof)
+            IUnitOfWork uof,
+            JwtService jwtService)
             : base (options,logger,encoder,clock)
         {
             _uof = uof;
+            _jwtService = jwtService;
         }
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            if (!Request.Headers.ContainsKey("Auth"))
+
+            try
+            {
+                var jwt = Request.Cookies["jwt"];
+
+                var token = _jwtService.Verify(jwt);
+
+                int userId = int.Parse(token.Issuer);
+
+                var user = await _uof.UserRepository.Get(userId);
+
+                var claims = new[] { new Claim(ClaimTypes.Name, user.EmailAddress) };
+                var identity = new ClaimsIdentity(claims, Scheme.Name);
+                var principal = new ClaimsPrincipal(identity);
+                var ticker = new AuthenticationTicket(principal, Scheme.Name);
+                return AuthenticateResult.Success(ticker);
+            }
+            catch
             {
                 return AuthenticateResult.Fail("Authorization was not found");
             }
-            try
-            {
-                var authenticationHeaderValue = AuthenticationHeaderValue.Parse(Request.Headers["Auth"]);
-                string[] credentials = authenticationHeaderValue.Parameter.Split(":");
-                string emailAddress = credentials[0];
-                string password = credentials[1];
-                IEnumerable<User> users = await _uof.UserRepository.Get();
-                if ((users != null) && (users.Count() > 0))
-                {
-                    foreach (User user in users)
-                    {
-                        if ((user.EmailAddress == emailAddress) && (user.Password == password))
-                        {
-                            var claims = new[] { new Claim(ClaimTypes.Name, user.EmailAddress)};
-                            var identity = new ClaimsIdentity(claims, Scheme.Name);
-                            var principal = new ClaimsPrincipal(identity);
-                            var ticker = new AuthenticationTicket(principal, Scheme.Name);
-                            return AuthenticateResult.Success(ticker);
-                        }
-                    }
-                }
-                else
-                {
-                    return AuthenticateResult.Fail("Invalid username or password");
-                }
-                return AuthenticateResult.Fail("Invalid username or password");
-            }
-
-            catch(Exception)
-            {
-                return AuthenticateResult.Fail("Error has occured");
-            }
-
-
         }
     }
 }

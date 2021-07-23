@@ -9,6 +9,7 @@ using UserApiSql.Data;
 using UserApiSql.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using UserApiSql.Handlers;
+using UserApiSql.Helpers;
 
 namespace UserApiSql
 {
@@ -30,6 +31,7 @@ namespace UserApiSql
                 .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication",null);
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<JwtService>();
             services.AddControllers();
         }
 

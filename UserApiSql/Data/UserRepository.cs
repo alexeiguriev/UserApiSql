@@ -9,7 +9,7 @@ using UserApiSql.Models;
 
 namespace UserApiSql.Data
 {
-    public class UserRepository : IRepository<User, UserInput>
+    public class UserRepository : IUserRepository<User, UserInput>
     {
         private readonly UserContext _context;
         private readonly IMapper _mapper;
@@ -68,6 +68,15 @@ namespace UserApiSql.Data
                 .ThenInclude(urr => urr.Role)
                 .Include(d => d.Documents)
                 .FirstOrDefaultAsync(i => i.Id == id);
+            return user;
+        }
+        public async Task<User> Get(string email)
+        {
+            User user = await _context.Users
+                .Include(ur => ur.UserRoles)
+                .ThenInclude(urr => urr.Role)
+                .Include(d => d.Documents)
+                .FirstOrDefaultAsync(i => i.EmailAddress == email);
             return user;
         }
         public async Task<User> Update(int id, UserInput userInput)
