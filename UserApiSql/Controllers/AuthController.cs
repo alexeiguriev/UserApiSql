@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using AutoMapper;
+using HelperCSharp;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -33,6 +34,8 @@ namespace UserApiSql.Controllers
         {
             try
             {
+                dto.Password = Crypt.DecodeFrom64(dto.Password);
+
                 // Map data convertion
                 UserInput user = _mapper.Map<UserInput>(dto);
                 // Create and put new user in database
@@ -60,6 +63,7 @@ namespace UserApiSql.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDTO dto)
         {
+            dto.Password = Crypt.DecodeFrom64(dto.Password);
             // Get the user from database according ID
             var user = await _uof.UserRepository.Get(dto.EmailAddress);
 

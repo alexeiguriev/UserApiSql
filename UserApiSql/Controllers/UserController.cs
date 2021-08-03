@@ -12,6 +12,7 @@ using UserApiSql.Data;
 using UserApiSql.Interfaces;
 using UserApiSql.Models;
 using Microsoft.AspNetCore.Authorization;
+using HelperCSharp;
 
 namespace UserApi.Controllers
 {
@@ -92,6 +93,8 @@ namespace UserApi.Controllers
         {
             try
             {
+                user.Password = Crypt.DecodeFrom64(user.Password);
+
                 // Create and put new user in database
                 var newUser = await _uof.UserRepository.Create(user);
 
@@ -120,6 +123,8 @@ namespace UserApi.Controllers
 
             try
             {
+                user.Password = Crypt.DecodeFrom64(user.Password);
+             
                 // Update user in database according ID
                 var newUser = await _uof.UserRepository.Update(id,user);
 
