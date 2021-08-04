@@ -14,8 +14,6 @@ namespace UserApiSql.Helper
     {
         public AutoMapping()
         {
-            CreateMap<RegisterDTO, UserInput>();
-
             CreateMap<User, UserDTO>()
                 .ForMember(d => d.RoleIds, opt => opt.MapFrom(s => Helper.GetRoleIdsFromUserRoleList(s.UserRoles)));
             

@@ -30,19 +30,19 @@ namespace UserApiSql.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterDTO dto)
+        public async Task<IActionResult> Register(UserInput userInput)
         {
             try
             {
-                dto.Password = Crypt.DecodeFrom64(dto.Password);
+                userInput.Password = Crypt.DecodeFrom64(userInput.Password);
 
                 // Map data convertion
-                UserInput user = _mapper.Map<UserInput>(dto);
+                UserInput userNew = _mapper.Map<UserInput>(userInput);
                 // Create and put new user in database
-                var newUser = await _uof.UserRepository.Create(user);
+                var newUser = await _uof.UserRepository.Create(userNew);
 
                 // Log information about new created user
-                _logger.LogInformation($"Post user: id: { user.Id }, FirstName: {user.FirstName}, LastName: {user.LastName}");
+                _logger.LogInformation($"Post user: id: { userNew.Id }, FirstName: {userNew.FirstName}, LastName: {userNew.LastName}");
 
                 // Map data convertion
                 UserDTO userDTO = _mapper.Map<UserDTO>(newUser);
@@ -52,7 +52,7 @@ namespace UserApiSql.Controllers
             catch (Exception ex)
             {
                 // Log information about creating user error
-                _logger.LogError(ex, $"ERROR: Post user: FirstName: {dto.FirstName}, LastName: {dto.LastName}");
+                _logger.LogError(ex, $"ERROR: Post user: FirstName: {userInput.FirstName}, LastName: {userInput.LastName}");
 
                 // Return error
                 return NotFound(404);
@@ -61,22 +61,22 @@ namespace UserApiSql.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginDTO dto)
+        public async Task<IActionResult> Login(UserInput userInput)
         {
-            dto.Password = Crypt.DecodeFrom64(dto.Password);
+            userInput.Password = Crypt.DecodeFrom64(userInput.Password);
             // Get the user from database according ID
-            var user = await _uof.UserRepository.Get(dto.EmailAddress);
+            var userNew = await _uof.UserRepository.Get(userInput.EmailAddress);
 
             // Check if user exists
-            if (user == null) return BadRequest(new { message = "Invalid Credentials" });
+            if (userNew == null) return BadRequest(new { message = "Invalid Credentials" });
 
             // Check the password
-            if (user.Password != dto.Password)
+            if (userNew.Password != userInput.Password)
             {
                 return BadRequest(new { message = "Invalid Credentials" });
             }
 
-            var jwt = _jwtService.Generate(user.Id);
+            var jwt = _jwtService.Generate(userNew.Id);
 
             Response.Cookies.Append("jwt", jwt, new CookieOptions
             {
