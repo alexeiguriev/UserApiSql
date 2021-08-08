@@ -67,6 +67,9 @@ namespace UserApiSql.Controllers
             // Get the user from database according ID
             var userNew = await _uof.UserRepository.Get(userInput.EmailAddress);
 
+            // Map data convertion
+            UserDTO userDTO = _mapper.Map<UserDTO>(userNew);
+
             // Check if user exists
             if (userNew == null) return BadRequest(new { message = "Invalid Credentials" });
 
@@ -83,12 +86,9 @@ namespace UserApiSql.Controllers
                 HttpOnly = true
             });
 
-            return Ok(new
-            {
-                message = "success"
-            });
+            return Ok(userDTO);
         }
-        [HttpPost("logout")]
+        [HttpGet("logout")]
         public IActionResult Logout()
         {
             Response.Cookies.Delete("jwt");
