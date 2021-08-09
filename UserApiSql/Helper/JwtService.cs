@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using UserApiSql.Models;
 
 namespace UserApiSql.Helpers
 {
@@ -9,16 +12,33 @@ namespace UserApiSql.Helpers
     {
         private string secureKey = "this is a very secure key";
 
-        public string Generate(int id)
+        public string Generate(User user)
         {
-            var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secureKey));
-            var credentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature);
-            var header = new JwtHeader(credentials);
 
-            var payload = new JwtPayload(id.ToString(), null, null, null, DateTime.Today.AddDays(1)); // 1 day
-            var securityToken = new JwtSecurityToken(header, payload);
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.FirstName),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Nbf, new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()),
+                new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(DateTime.Now.AddDays(1)).ToUnixTimeSeconds().ToString())
+            };
 
-            return new JwtSecurityTokenHandler().WriteToken(securityToken);
+            foreach (var role in user.UserRoles)
+            {
+
+                claims.Add(new Claim(ClaimTypes.Role, role.Role.Name));
+            }
+
+            string key = secureKey;
+
+            var token = new JwtSecurityToken(
+                new JwtHeader(
+                    new SigningCredentials(
+                        new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
+                        SecurityAlgorithms.HmacSha256)),
+                new JwtPayload(claims));
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
         public JwtSecurityToken Verify(string jwt)

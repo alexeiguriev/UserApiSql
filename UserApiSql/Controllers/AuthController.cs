@@ -1,8 +1,12 @@
 using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using HelperCSharp;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using UserApiSql.Helpers;
@@ -79,9 +83,9 @@ namespace UserApiSql.Controllers
                 return BadRequest(new { message = "Invalid Credentials" });
             }
 
-            var jwt = _jwtService.Generate(userNew.Id);
+            var jwt = _jwtService.Generate(userNew);
 
-            Response.Cookies.Append("jwt", jwt, new CookieOptions
+            Response.Cookies.Append("JwtBearer", jwt, new CookieOptions
             {
                 HttpOnly = true
             });
