@@ -85,10 +85,6 @@ namespace UserApiSql.Controllers
 
             var jwt = _jwtService.Generate(userNew);
 
-            Response.Cookies.Append("JwtBearer", jwt, new CookieOptions
-            {
-                HttpOnly = true
-            });
             var output = new
             {
                 Access_Token = jwt,
