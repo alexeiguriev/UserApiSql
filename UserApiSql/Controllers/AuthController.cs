@@ -89,8 +89,13 @@ namespace UserApiSql.Controllers
             {
                 HttpOnly = true
             });
+            var output = new
+            {
+                Access_Token = jwt,
+                user = userDTO
+            };
 
-            return Ok(userDTO);
+            return Ok(output);
         }
         [HttpGet("logout")]
         public IActionResult Logout()
