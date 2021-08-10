@@ -90,42 +90,21 @@ namespace UserApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostDocuments([FromForm(Name = "file")] IFormFile file, [FromForm(Name = "text")] string inputJSONString)
+        public async Task<IActionResult> PostDocuments(InputDocument InputDocument)
         {
             try
             {
-                // Check if file in not null
-                if (file != null)
-                {
-                    // Check if file is in range
-                    if ((file.Length > 0) || (file.Length < 10000000))
-                    {
-                        // Convert input data to InputDocument data type
-                        InputDocument storageDocument = _mapper.Map<InputDocument>((inputJSONString, file));
+                // Put on db new document
+                var newDocument = await _uof.DocumentRepository.Create(InputDocument);
 
-                        // Put on db new document
-                        var newDocument = await _uof.DocumentRepository.Create(storageDocument);
+                // Map data convertion
+                DocumentDTO documentDTO = _mapper.Map<DocumentDTO>(newDocument);
 
-                        // Map data convertion
-                        DocumentDTO documentDTO = _mapper.Map<DocumentDTO>(newDocument);
+                // Log the post data information
+                _logger.LogInformation($"Post document: Name: {documentDTO.Name} ");
 
-                        // Log the post data information
-                        _logger.LogInformation($"Post document: Name: {documentDTO.Name} ");
-
-                        //Return statuc
-                        return Ok(documentDTO);
-                    }
-                    else
-                    {
-                        // File out of range
-                        return NotFound("File length out of range");
-                    }
-                }
-                else
-                {
-                    // File object is null
-                    return NotFound("Wrong file: file is null");
-                }
+                //Return statuc
+                return Ok(documentDTO);
 
             }
             catch (Exception ex)
