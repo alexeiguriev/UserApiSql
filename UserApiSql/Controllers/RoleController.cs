@@ -11,11 +11,13 @@ using UserApiSql.ModelsDTO;
 using UserApiSql.Data;
 using UserApiSql.Interfaces;
 using UserApiSql.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace UserApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+//    [Authorize]
     public class RoleController : ControllerBase
     {
         private readonly IMapper _mapper;

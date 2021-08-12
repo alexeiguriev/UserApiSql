@@ -15,7 +15,7 @@ namespace UserApiSql.Helper
         public AutoMapping()
         {
             CreateMap<User, UserDTO>()
-                .ForMember(d => d.RoleIds, opt => opt.MapFrom(s => Helper.GetRoleIdsFromUserRoleList(s.UserRoles)));
+                .ForMember(d => d.Roles, opt => opt.MapFrom(s => Helper.GetRoleIdsFromUserRoleList(s.UserRoles)));
             
             CreateMap<Document, DocumentDTO>()
                 .ForMember(d => d.UpdatedByUserId, opt => opt.MapFrom(s => s.UpdatedBy.Id));
