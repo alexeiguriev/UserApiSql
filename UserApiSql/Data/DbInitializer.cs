@@ -46,6 +46,7 @@ namespace UserApiSql.Data
         {
             List<Role> roles = new List<Role>()
             {
+                new Role{Name="User"},
                 new Role{Name="Admin"},
                 new Role{Name="PM"},
                 new Role{Name="Developer"},
@@ -63,11 +64,11 @@ namespace UserApiSql.Data
 
             List<UserRole> userRoles = new List<UserRole>()
             {
-                new UserRole{UserId=1,RoleId=1},
-                new UserRole{UserId=2,RoleId=2},
-                new UserRole{UserId=3,RoleId=3},
-                new UserRole{UserId=4,RoleId=4},
-                new UserRole{UserId=5,RoleId=5}
+                new UserRole{UserId=1,RoleId=2},
+                new UserRole{UserId=2,RoleId=3},
+                new UserRole{UserId=3,RoleId=4},
+                new UserRole{UserId=4,RoleId=5},
+                new UserRole{UserId=5,RoleId=6}
             };
             foreach (UserRole userRole in userRoles)
             {

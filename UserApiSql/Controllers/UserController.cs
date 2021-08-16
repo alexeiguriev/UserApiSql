@@ -123,7 +123,11 @@ namespace UserApi.Controllers
 
             try
             {
-                user.Password = Crypt.DecodeFrom64(user.Password);
+                // Check if pasword is not null.
+                if (!string.IsNullOrEmpty(user.Password))
+                {
+                    user.Password = Crypt.DecodeFrom64(user.Password);
+                }                
              
                 // Update user in database according ID
                 var newUser = await _uof.UserRepository.Update(id,user);
