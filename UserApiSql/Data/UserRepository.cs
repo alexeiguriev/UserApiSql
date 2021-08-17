@@ -30,6 +30,8 @@ namespace UserApiSql.Data
 
             if (userInput.UserRolesId != null)
             {
+                await ReadRolesForUpdateLocalStructure();
+
                 foreach (int userRoleId in userInput.UserRolesId)
                 {
                     UserRole userRole = new UserRole { UserId = user.Id, RoleId = userRoleId };
