@@ -79,17 +79,18 @@ namespace UserApiSql.Data
                 .FirstOrDefaultAsync(i => i.EmailAddress == email);
             return user;
         }
-        public async Task<User> Update(int id, UserInput userInput)
+        public async Task<User> Update(int userId, UserInput userInput)
         {
-            User user = new User();
-            user = _mapper.Map<User>(userInput);
-            user.Id = id;
+            await UpdateUserAvoidNulls(userInput,userId);
 
+            if (userInput.UserRolesId != null)
+            {
+                await UpdateUserRoles(userId, userInput.UserRolesId);
 
-            _context.Entry(user).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+                await ReadRolesForUpdateLocalStructure();
+            }
 
-            await UpdateUserRoles(id, userInput.UserRolesId);
+            User user = await Get(userId);
 
             return user;
         }
@@ -117,6 +118,36 @@ namespace UserApiSql.Data
             }
             await _context.SaveChangesAsync();
 
+        }
+        private async Task<IEnumerable<Role>> ReadRolesForUpdateLocalStructure()
+        {
+            IEnumerable<Role> role = await _context.Roles
+                .Include(ur => ur.UserRoles)
+                .ThenInclude(uru => uru.User)
+                .ToListAsync();
+
+            return role;
+        }
+        private async Task UpdateUserAvoidNulls(UserInput userInput, int userId)
+        {
+            User user = _context.Users.First(a => a.Id == userId);
+            if (!string.IsNullOrEmpty(userInput.FirstName))
+            {
+                user.FirstName = userInput.FirstName;
+            }
+            if (!string.IsNullOrEmpty(userInput.LastName))
+            {
+                user.LastName = userInput.LastName;
+            }
+            if (!string.IsNullOrEmpty(userInput.EmailAddress))
+            {
+                user.EmailAddress = userInput.EmailAddress;
+            }
+            if (!string.IsNullOrEmpty(userInput.Password))
+            {
+                user.Password = userInput.Password;
+            }
+            await _context.SaveChangesAsync();
         }
 
     }
