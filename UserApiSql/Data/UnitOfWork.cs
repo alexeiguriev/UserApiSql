@@ -23,6 +23,8 @@ namespace UserApiSql.Data
             new DocumentRepository(dc);
         public IRepository<Role, Role> RoleRepository =>
             new RoleRepository(dc);
+        public IRepository<Noti, NotiInput> NotiRepository =>
+            new NotiRepository(dc);
 
         public async Task<bool> SaveAsync()
         {

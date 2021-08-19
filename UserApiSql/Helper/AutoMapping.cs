@@ -20,6 +20,12 @@ namespace UserApiSql.Helper
             CreateMap<Document, DocumentDTO>()
                 .ForMember(d => d.UpdatedByUserId, opt => opt.MapFrom(s => s.UpdatedBy.Id));
 
+            CreateMap<Noti, NotiDTO>()
+                .ForMember(d => d.FromUserId, opt => opt.MapFrom(s => s.FromUser.Id))
+                .ForMember(d => d.ToUserId, opt => opt.MapFrom(s => s.ToUser.Id))
+                .ForMember(d => d.FromUserName, opt => opt.MapFrom(s => $"{s.FromUser.FirstName} {s.FromUser.LastName}"))
+                .ForMember(d => d.ToUserName, opt => opt.MapFrom(s => $"{s.ToUser.FirstName} {s.ToUser.LastName}"));
+
             CreateMap<(string str, IFormFile file), InputDocument>()
                 .ForMember(d => d.UpdaterId, opt => opt.MapFrom(s => Newtonsoft.Json.JsonConvert.DeserializeObject<InputDocument>(s.str).UpdaterId))
                 .ForMember(d => d.Status, opt => opt.MapFrom(s => Newtonsoft.Json.JsonConvert.DeserializeObject<InputDocument>(s.str).Status))

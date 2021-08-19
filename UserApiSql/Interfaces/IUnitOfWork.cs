@@ -12,6 +12,7 @@ namespace UserApiSql.Interfaces
         IUserRepository<User, UserInput> UserRepository { get; }
         IRepository<Document, InputDocument> DocumentRepository { get; }
         IRepository<Role, Role> RoleRepository { get; }
+        IRepository<Noti, NotiInput> NotiRepository { get; }
         Task<bool> SaveAsync();
     }
 }

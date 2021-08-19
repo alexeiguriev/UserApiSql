@@ -18,6 +18,7 @@ namespace UserApiSql.Data
         public DbSet<Document> Documents { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
+        public DbSet<Noti> Noti { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserRole>()
