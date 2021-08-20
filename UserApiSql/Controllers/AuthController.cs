@@ -65,7 +65,7 @@ namespace UserApiSql.Controllers
         {
             userInput.Password = Crypt.DecodeFrom64(userInput.Password);
             // Get the user from database according ID
-            var userNew = await _uof.UserRepository.Get(userInput.EmailAddress);
+            var userNew = await _uof.UserRepository.GetByEmail(userInput.EmailAddress);
 
             // Map data convertion
             UserDTO userDTO = _mapper.Map<UserDTO>(userNew);

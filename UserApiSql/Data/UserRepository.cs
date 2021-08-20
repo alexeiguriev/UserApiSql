@@ -72,7 +72,7 @@ namespace UserApiSql.Data
                 .FirstOrDefaultAsync(i => i.Id == id);
             return user;
         }
-        public async Task<User> Get(string email)
+        public async Task<User> GetByEmail(string email)
         {
             User user = await _context.Users
                 .Include(ur => ur.UserRoles)
@@ -152,5 +152,18 @@ namespace UserApiSql.Data
             await _context.SaveChangesAsync();
         }
 
+        public Task<User> GetByRoles(string Role)
+        {
+            throw new NotImplementedException();
+        }
+        //public async Task<List<User>> GetByRole(string roleName)
+        //{
+        //    List<Role> Roles = await _context.Roles
+        //        .Include(ur => ur.UserRoles)
+        //        .ThenInclude(urr => urr.Role)
+        //        .Include(d => d.Documents)
+        //        .FirstOrDefaultAsync(i => i.UserRoles == email);
+        //    return user;
+        //}
     }
 }

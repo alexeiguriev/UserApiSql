@@ -227,7 +227,7 @@ namespace UserApiSql.Controllers
                 // Log information about uset delete
                 _logger.LogInformation($"Delete noti: id: { notiToDelete.Id }");
 
-                return Ok("The noti has been deleted");
+                return Ok("The notification has been deleted");
             }
             catch (Exception ex)
             {

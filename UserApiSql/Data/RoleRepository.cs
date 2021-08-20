@@ -49,6 +49,13 @@ namespace UserApiSql.Data
                 .FirstOrDefaultAsync(i => i.Id == id);
             return role;
         }
+        public async Task<Role> GetByRoleName(string roleName)
+        {
+            Role role = await _context.Roles
+                .Include(ur => ur.UserRoles)
+                .FirstOrDefaultAsync(i => i.Name == roleName);
+            return role;
+        }
 
         public async Task<Role> Update(int id, Role role)
         {

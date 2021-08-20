@@ -7,6 +7,7 @@ namespace UserApiSql.Interfaces
 {
     public interface IUserRepository<TEntity, TInputData> : IRepository<TEntity, TInputData>
     {
-        public Task<TEntity> Get(string email);
+        public Task<TEntity> GetByEmail(string email);
+        public Task<TEntity> GetByRoles(string Role);
     }
 }
