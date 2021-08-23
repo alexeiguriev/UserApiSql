@@ -88,6 +88,35 @@ namespace UserApi.Controllers
                 return NotFound(404);
             }
         }
+        [HttpGet("{docName}/byname")]
+        public async Task<IActionResult> GetDocumentsByName(string docName)
+        {
+            try
+            {
+                // Get all the documents from database
+                var documents = await _uof.DocumentRepository.Get();
+
+                // Data map convertion
+                IEnumerable<DocumentDTO> documentDTO = _mapper.Map<IEnumerable<DocumentDTO>>(documents);
+
+                // Log the information about all documents getting.
+                _logger.LogInformation("Get all documents");
+
+                // FindAll by name
+                List<DocumentDTO> documentDTOByName = documentDTO.ToList().FindAll(d => d.Name == docName);
+
+                //Return all the documents
+                return Ok(documentDTOByName);
+            }
+            catch (Exception ex)
+            {
+                // Log the error information
+                _logger.LogError(ex, "Error: Get all documents error");
+
+                // Return error
+                return NotFound(404);
+            }
+        }
 
         [HttpPost]
         public async Task<IActionResult> PostDocuments(InputDocument InputDocument)
