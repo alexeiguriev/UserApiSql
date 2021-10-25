@@ -1,0 +1,3 @@
+[submodule "HelperCSharp"]
+	path = HelperCSharp
+	url = https://github.com/alexeiguriev/HelperCSharp
