@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HelperCSharp\HelperCSharp.csproj" />
+    <ProjectReference Include="..\HelperCSharp\HelperCSharp\HelperCSharp.csproj" />
   </ItemGroup>
 
 </Project>
