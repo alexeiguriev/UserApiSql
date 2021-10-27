@@ -72,3 +72,4 @@ UserApiSql/obj/Debug/net5.0/UserApiSql.RazorTargetAssemblyInfo.cache
 UserApiSql/obj/Debug/net5.0/ref/UserApiSql.dll
 UserApiSql/obj/Debug/net5.0/staticwebassets/UserApiSql.StaticWebAssets.Manifest.cache
 UserApiSql/obj/Debug/net5.0/staticwebassets/UserApiSql.StaticWebAssets.xml
+UserApiSql/bin/Debug/net5.0/appsettings.Prodiction.json

@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-api-sql-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-api-sqlservice
+  template:
+    metadata:
+      labels:
+        app: user-api-sqlservice
+    spec:
+      containers:
+        - name: user-api-sqlservice
+          image: alexeiguriev/user-api-sql-service:latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-api-sqls-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: user-api-sqlservice
+  ports:
+  - name: user-api-sqlservice
+    protocol: TCP
+    port: 90
+    targetPort: 90
+  - name: user-api-sqlsgrpc
+    protocol: TCP
+    port: 777
+    targetPort: 777

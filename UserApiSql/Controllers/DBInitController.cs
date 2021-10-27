@@ -28,14 +28,15 @@ namespace UserApi.Controllers
         [HttpPost]
         public IActionResult PostDBInit()
         {
+            Console.WriteLine("--> DB Initalization Request ....");
             try
             {
                 string state = DbInitializer.Initialize(dc);
                 return Ok(state);
             }
-            catch
+            catch (Exception ex)
             {
-                return NotFound();
+                return NotFound(ex);
             }
         }
     }

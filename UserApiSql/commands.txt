@@ -1,0 +1,15 @@
+Docker
+docker build -t alexeiguriev/user-api-sql-service .
+docker push alexeiguriev/user-api-sql-service
+docker run --name alexeiguriev/user-api-sql-service
+
+Kubernetes
+
+deployment
+kubectl apply -f user-api-sql-depl.yaml
+kubectl delete deployment user-api-sql-depl
+
+service
+kubectl apply -f user-api-sql-np-srv.yaml
+kubectl delete svc user-web-apis-clusterip-srv
+

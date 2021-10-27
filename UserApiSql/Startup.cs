@@ -10,23 +10,37 @@ using UserApiSql.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using UserApiSql.Handlers;
 using UserApiSql.Helpers;
+using System;
 
 namespace UserApiSql
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public IConfiguration Configuration { get; }
+        private readonly IWebHostEnvironment _env;
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            _env = env;
         }
-
-        public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddLogging();
-            services.AddDbContext<UserContext>(opt =>
-                                               opt.UseSqlServer(Configuration.GetConnectionString("UserContext")));
+            if (_env.IsProduction())
+            {
+                Console.WriteLine("--> Envirement is in Production mode");
+                Console.WriteLine("--> Use user-api-sqls-clusterip-srv DB");
+                services.AddDbContext<UserContext>(opt =>
+                            opt.UseSqlServer(Configuration.GetConnectionString("UserContext")));
+            }
+            else
+            {
+                Console.WriteLine("--> Envirement is in development mode");
+                Console.WriteLine("--> Use local DB");
+                services.AddDbContext<UserContext>(opt =>
+                            opt.UseSqlServer(Configuration.GetConnectionString("UserContext")));
+            }
             services.AddAuthentication("BasicAuthentication")
                 .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication",null);
             services.AddAutoMapper(typeof(Startup));
