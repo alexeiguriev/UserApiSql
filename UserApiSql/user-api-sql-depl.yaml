@@ -6,30 +6,30 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: user-api-sqlservice
+      app: user-api-sql-service
   template:
     metadata:
       labels:
-        app: user-api-sqlservice
+        app: user-api-sql-service
     spec:
       containers:
-        - name: user-api-sqlservice
+        - name: user-api-sql-service
           image: alexeiguriev/user-api-sql-service:latest
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: user-api-sqls-clusterip-srv
+  name: user-api-sql-clusterip-srv
 spec:
   type: ClusterIP
   selector:
-    app: user-api-sqlservice
+    app: user-api-sql-service
   ports:
-  - name: user-api-sqlservice
+  - name: user-api-sql-service
     protocol: TCP
-    port: 90
-    targetPort: 90
-  - name: user-api-sqlsgrpc
+    port: 80
+    targetPort: 80
+  - name: user-api-sql-grpc
     protocol: TCP
-    port: 777
-    targetPort: 777
+    port: 666
+    targetPort: 666

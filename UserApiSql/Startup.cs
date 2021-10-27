@@ -31,8 +31,16 @@ namespace UserApiSql
             {
                 Console.WriteLine("--> Envirement is in Production mode");
                 Console.WriteLine("--> Use user-api-sqls-clusterip-srv DB");
-                services.AddDbContext<UserContext>(opt =>
+                try
+                {
+                    services.AddDbContext<UserContext>(opt =>
                             opt.UseSqlServer(Configuration.GetConnectionString("UserContext")));
+                    Console.WriteLine("--> Initialized user-api-sqls-clusterip-srv DB");
+                }
+                catch
+                {
+                    Console.WriteLine("--> user-api-sqls-clusterip-srv DB Initialization error");
+                }
             }
             else
             {
@@ -47,6 +55,7 @@ namespace UserApiSql
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<JwtService>();
             services.AddControllers();
+            Console.WriteLine("--> Services configuration: Done");
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
