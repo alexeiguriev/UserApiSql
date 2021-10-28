@@ -44,10 +44,39 @@ namespace UserApiSql
             }
             else
             {
-                Console.WriteLine("--> Envirement is in development mode");
-                Console.WriteLine("--> Use local DB");
-                services.AddDbContext<UserContext>(opt =>
+                bool sqlInitialized = false;
+                try
+                {
+                    switch(Configuration.GetSection("DatabaseType").Value)
+                    {
+                        case "SQL":
+                        {
+                            Console.WriteLine("--> Envirement is in development mode");
+                            Console.WriteLine("--> Use local DB");
+                            services.AddDbContext<UserContext>(opt =>
                             opt.UseSqlServer(Configuration.GetConnectionString("UserContext")));
+                            sqlInitialized = true;
+                            break;
+                        }
+                        default:
+                        {
+                            /* Do nothing */
+                            break;
+                        }
+
+                    }
+                }
+                catch
+                {
+                            Console.WriteLine("--> SQL could not initialize ");
+                }
+                if (false == sqlInitialized)
+                {
+                            Console.WriteLine("--> Using InMem Db");
+                            services.AddDbContext<UserContext>(opt =>
+                            opt.UseInMemoryDatabase("InMem"));
+                }
+
             }
             services.AddAuthentication("BasicAuthentication")
                 .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication",null);
@@ -75,6 +104,9 @@ namespace UserApiSql
             {
                 endpoints.MapControllers();
             });
+
+            bool sqlEn = (env.IsProduction() || (Configuration.GetSection("DatabaseType").Value == "SQL"));
+            PrepDb.PrepPopulation(app, sqlEn);
         }
     }
 }
