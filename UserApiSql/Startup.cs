@@ -27,7 +27,8 @@ namespace UserApiSql
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddLogging();
-            if (_env.IsProduction())
+            bool sqlEn = (_env.IsProduction() || (Configuration.GetSection("DatabaseType").Value == "SQL"));
+            if (sqlEn)
             {
                 Console.WriteLine("--> Envirement is in Production mode");
                 Console.WriteLine("--> Use user-api-sqls-clusterip-srv DB");

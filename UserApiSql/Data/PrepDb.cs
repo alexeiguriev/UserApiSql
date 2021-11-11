@@ -19,25 +19,25 @@ namespace UserApiSql.Data
 
         private static void SeedData(UserContext context, bool sql)
         {
-            if(sql)
-            {
-                Console.WriteLine("--> Attempting to apply migrations...");
-                try
-                {
-                    context.Database.Migrate();
-                }
-                catch(Exception ex)
-                {
-                    Console.WriteLine($"--> Could not run migrations: {ex.Message}");
-                }
-            }
-            else
-            {
-                UserInitialization(context);
-                DocumentInit(context);
-                RoleInit(context);
-                UserRolesInit(context);
-            }
+            // if(sql)
+            // {
+            //     Console.WriteLine("--> Attempting to apply migrations...");
+            //     try
+            //     {
+            //         context.Database.Migrate();
+            //     }
+            //     catch(Exception ex)
+            //     {
+            //         Console.WriteLine($"--> Could not run migrations: {ex.Message}");
+            //     }
+            // }
+            // else
+            // {
+            //     UserInitialization(context);
+            //     DocumentInit(context);
+            //     RoleInit(context);
+            //     UserRolesInit(context);
+            // }
             
         }
         
